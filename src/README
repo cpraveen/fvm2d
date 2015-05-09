@@ -1,0 +1,151 @@
+******************************************************************************
+*                           Finite Volume Solver                             *
+*                                written by                                  *
+*                                Praveen. C                                  *
+******************************************************************************
+
+This is a vertex-based finite volume solver for Euler and Navier-Stokes
+equations with Spalart-Allmaras turbulence model. It has two cell-types:
+median cell and barth/diamond cell. The median cell is obtained by joining
+the centroid of each triangle to the mid-point of its three sides. The barth
+cell is obtained by:
+1. joining the circumcenter to the mid-point of the three sides for an acute
+   angled triangle
+2. joining the mid-point of the largest side to the other two sides for a
+   right-angled or obtuse-angled triangle
+
+For an acute angled triangle the barth cell coincides with the voronoi
+tessellation.
+
+Currently, two flux function are supported: Roe and KFVS. Higher order
+accuracy is obtained using linear reconstruction and an edge-based van
+Albada-type limiter. For slip walls, the boundary condition is enforced weakly
+by satisfying the flux boundary condition. For no-slip walls the velocity is
+explicitly set to zero. Time-stepping is performed using a 3-stage scheme of Shu
+and Osher but the code is not time accurate since the mass matrix is lumped.
+
+Spalart-Allmaras turbulence model is used for calculating turbulent viscosity.
+The convective terms are discretized with first order upwinding and diffusion
+terms by Galerkin approximation. The destruction term is treated in a
+semi-implicit manner.
+------------------------------------------------------------------------------
+Data structure
+------------------------------------------------------------------------------
+
+coord(2,npmax): coord(1,.) and coord(2,.) are the x and y coordinates of the
+vertex points
+
+elem(3,ntmax):  Indices of the three vertices forming the triangle in
+counter-clockwise order.
+
+edge(2,nemax):  Indices of the two vertices forming the edge.
+
+prim(nvar,npmax): Primitive variables (density, x velocity, y velocity,
+pressure) and turbulent viscosity.
+
+------------------------------------------------------------------------------
+Input file
+------------------------------------------------------------------------------
+This is the parameter file required for running the solver and contains the
+flow conditions and the numerical scheme to be used. An example is given
+below.
+
+Start     1
+FlowType  3
+Mach      0.85
+AOA       1.00
+Reynolds  100.0
+CFL       0.8
+LastIter  0
+MaxIter   5000
+MinRes    1.0e-6
+SaveInt   100
+NoIso     30
+Flux      1
+Limiter   1
+FarBC     1  0.25  0.0
+CellType  2
+GridFile  "../grd-visc/naca.9567"
+
+The order of the parameters must be maintained.
+
+Start     1=start from freestream values, 2=restart from previous solution
+          from file INIT
+FlowType  1=inviscid, 2=laminar viscous, 3=turbulent viscous
+Mach      Mach number
+AOA       Angle of attack in degrees
+Reynolds  Reynolds number based on chord
+CFL       CFL number
+LastIter  0
+MaxIter   Maximum number of iterations
+MinRes    Wh
+SaveInt   Number of iterations between which results must be saved
+NoIso     Number of contours
+Flux      1=Roe, 2=KFVS
+Limiter   0=no, 1=yes
+FarBC     (0=no, 1=yes)   x-coordinate  y-coordinate
+CellType  1=median cell, 2=barth cell
+GridFile  Grid file
+
+------------------------------------------------------------------------------
+Grid file
+------------------------------------------------------------------------------
+The grid file must be in amdba format.
+
+<Number of points>  <Number of triangles>
+<point index>  <x coordinate>  <y coordinate>  <point type>
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+      .              .               .               .
+<Triangle index>  <Point 1>  <Point 2>  <Point 3>  <Type>
+       .              .          .          .         .
+       .              .          .          .         .
+       .              .          .          .         .
+       .              .          .          .         .
+       .              .          .          .         .
+       .              .          .          .         .
+       .              .          .          .         .
+
+------------------------------------------------------------------------------
+Output files
+------------------------------------------------------------------------------
+All output files are named in capital letters to distinguish them from other
+files. The grid is written into GRID.DAT and DUAL.DAT, and the boundary is in
+BD.DAT all of which can be visualized using gnuplot. The results are written
+in three different formats for visualization with gnuplot, vigie and MayaVi
+(actually vtk format).
+
+The gnuplot files are:
+GNU.PRES -> Pressure contours
+GNU.MACH -> Mach number contours
+GNU.VISC -> Turbulent viscosity contours
+GNU.VECT -> Velocity vectors
+
+For example, you can visualize the contours by typing
+
+gnuplot> set size ratio -1
+gnuplot> plot "GNU.PRES" w l,"BD.DAT" w l
+
+The vigie and MayaVi files are RESULT.VIG and RESULT.VTK respectively. These
+files are written at the very end of the program. If the solver crashes in
+between for some reason then these files wont be written. A file PARAM.DAT is
+written at the end which contains some information on the converged solution.
+
+For visualizing contours with MayaVi you can type
+
+$ mayavi -d RESULT.VTK -f PolyDataNormals -f UserDefined:vtkFeatureEdges \
+         -m SurfaceMap -M new -m SurfaceMap
+
+Wall data is written into WALL.DAT
+For inviscid flow it contains
+
+<x coordinate>  <-Cp>
+
+while for viscous flows it contains
+
+<x coordinate>  <-Cp>  <Cf>  <y for first layer>  <y+ for first layer>

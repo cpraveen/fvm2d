@@ -1,0 +1,34 @@
+06 Sep 2005:
+Separated green_gauss subroutine into green_gauss_euler and green_gauss_visc
+for inviscid and viscous flows.
+------------------------------------------------------------------------------
+09 Sep 2005:
+Removed flow type checking while calculating Cl and Cd in clcd.f
+For inviscid flow, mu should be set to zero so that the result is correct.
+
+Added vortex correction for far-field bc. This can be switched on in the input
+file. You must also specify the coordinates of the vortex center.
+------------------------------------------------------------------------------
+11 Sep 2005:
+Calculation of wdmin, wdmax now uses point-surrounding-point data. A new array
+wd1(nspmax) stores the distance of nearest interior point for every solid
+point.
+
+Renamed CP.DAT to WALL.DAT
+
+Skin friction coefficient is now calculated using friction force given by:
+tw = mu*d(u.t)/dn
+
+Distance of nearest interior point and corresponding y+ is now printed into
+WALL.DAT in result.f
+------------------------------------------------------------------------------
+1 Nov 2005:
+Added HLLC flux function - not validated yet
+------------------------------------------------------------------------------
+13 Dec 2005:
+read_grid and prep_gnuplot moved to main file fvm.f
+------------------------------------------------------------------------------
+15 Dec. 2005:
+Some print statements like banners moved to misc.f
+New subroutine fvm_residual which computes the flux divergence
+------------------------------------------------------------------------------

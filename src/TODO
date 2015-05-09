@@ -1,0 +1,12 @@
+1. Outer bc, flux-based
+2. Sutherland law - done
+3. Temperature bc isothernal
+4. Spallart-Allmaras model - done
+5. Remove edges which have zero length - happens only for Barth-cell - done
+
+--------------
+outflow bc:
+
+Assign outflow tag
+find outflow points
+call outflow bc in divergence.f and sa_model.f

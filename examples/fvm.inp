@@ -1,0 +1,16 @@
+Start     1
+FlowType  1
+Mach      0.63
+AOA       2.00
+Reynolds  100.0
+CFL       0.1
+LastIter  0
+MaxIter   0
+MinRes    1.0e-6
+SaveInt   100
+NoIso     30
+Flux      3
+Limiter   0
+FarBC     0  0.25  0.0
+CellType  2
+GridFile  "../grd/naca.4738"
