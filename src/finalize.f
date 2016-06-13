@@ -8,7 +8,7 @@
       integer          i
       double precision u1, u2, u3, u4, u5
 
-      call vigie(coord, elem, prim, nut)
+c     call vigie(coord, elem, prim, nut)
       call mayavi(coord, elem, prim, nut)
 
       open(unit=20, file='SOL')

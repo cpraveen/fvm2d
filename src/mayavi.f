@@ -8,8 +8,10 @@ C.....Result in VTK format for MayaVi
       integer           i, maya
       double precision  q2, mach
 
+      write(*,*)'Writing vtk file RESULT.vtk'
+
       maya = 55
-      open(unit=maya, file='RESULT.VTK')
+      open(unit=maya, file='RESULT.vtk')
 
       write(maya,10)
 10    format('# vtk DataFile Version 3.0')

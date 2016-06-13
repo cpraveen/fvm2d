@@ -149,3 +149,9 @@ For inviscid flow it contains
 while for viscous flows it contains
 
 <x coordinate>  <-Cp>  <Cf>  <y for first layer>  <y+ for first layer>
+------------------------------------------------------------------------------
+Notes
+------------------------------------------------------------------------------
+There are no grid files. Some grid files are located in
+
+https://github.com/cpraveen/flo2d/tree/master/examples-old

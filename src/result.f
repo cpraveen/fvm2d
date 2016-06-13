@@ -176,7 +176,7 @@ cc velocity vector for gnuplot
 c Run gnuplot and Start xv if not already started
       if(xvstatus .eq. no .and. iterlast .eq. 0)then
             call system('gnuplot res.gnu')
-            call system('xv -poll res.png &')
+c           call system('xv -poll res.png &')
             xvstatus = yes
       else
             call system('gnuplot res.gnu &')

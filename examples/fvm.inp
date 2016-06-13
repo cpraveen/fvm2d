@@ -1,16 +1,16 @@
-Start     1
-FlowType  1
-Mach      0.63
-AOA       2.00
-Reynolds  0.0
-CFL       0.8
-LastIter  0
-MaxIter   10000
-MinRes    1.0e-6
-SaveInt   100
-NoIso     30
-Flux      3
-Limiter   0
-FarBC     0  0.25  0.0
-CellType  2
-GridFile  "../grd/naca.4738"
+Start     1               1=scratch, 2=restart
+FlowType  1               1=Euler, 2=Laminar, 3=Turbulent
+Mach      0.63            mach number
+AOA       2.00            angle of attack
+Reynolds  0.0             reynolds number
+CFL       0.8             cfl number
+LastIter  0               iteration count from pevious run
+MaxIter   10000           max number of time steps
+MinRes    1.0e-6          residual tolerance
+SaveInt   100             interval to save solution
+NoIso     30              number of isocontours in gnuplot
+Flux      1               1=Roe, 2=KFVS, 3=HLLC
+Limiter   0               0=no limiter
+FarBC     0  0.25  0.0    point vortex correction
+CellType  2               1=Median, 2=voronoi
+GridFile  "./naca.4738"
