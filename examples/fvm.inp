@@ -2,10 +2,10 @@ Start     1
 FlowType  1
 Mach      0.63
 AOA       2.00
-Reynolds  100.0
-CFL       0.1
+Reynolds  0.0
+CFL       0.8
 LastIter  0
-MaxIter   0
+MaxIter   10000
 MinRes    1.0e-6
 SaveInt   100
 NoIso     30
